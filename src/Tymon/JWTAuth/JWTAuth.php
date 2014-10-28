@@ -127,6 +127,11 @@ class JWTAuth {
 	 */
 	public function getToken($query = 'token')
 	{
+		if(!$this->request->headers->has('authorization') ||  count($this->request->headers->all()['authorization']) == 0 || $this->request->headers->all()['authorization'][0] == '')
+		{
+			return false;
+		}
+
 		if ( ! $token = $this->parseAuthHeader() )
 		{
 			if ( ! $token = $this->request->query($query, false) )
