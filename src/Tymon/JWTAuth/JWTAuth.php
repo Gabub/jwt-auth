@@ -32,6 +32,11 @@ class JWTAuth {
 	 * @var string
 	 */
 	protected $identifier = 'id';
+	
+	/**
+	 * @var array
+	 */
+	protected $custom = [];
 
 	/**
 	 * @var string
@@ -78,8 +83,14 @@ class JWTAuth {
 	 * @param  $user
 	 * @return string
 	 */
-	public function fromUser($user, $custom = [])
+	public function fromUser($user)
 	{
+		var $custom = [];
+		
+		foreach($this->custom as $key => $value)
+		{
+			$custom[$value] = $user->{$value};
+		}
 		return $this->provider->encode($user->{$this->identifier}, $custom)->get();
 	}
 
@@ -89,14 +100,14 @@ class JWTAuth {
 	 * @param  array $credentials
 	 * @return false|string
 	 */
-	public function attempt(array $credentials = [], $custom = [])
+	public function attempt(array $credentials = [])
 	{
 		if (! $this->auth->once($credentials) )
 		{
 			return false;
 		}
-
-		return $this->fromUser( $this->auth->user(), $custom );
+		
+		return $this->fromUser( $this->auth->user());
 	}
 
 	/**
@@ -170,7 +181,19 @@ class JWTAuth {
 	{
 		return $this->provider;
 	}
+	
+	/**
+	 * Set the custom payload
+	 * 
+	 * @param string $custom
+	 */
+	public function setCustom($custom)
+	{
+		$this->custom = $custom;
 
+		return $this;
+	}
+	
 	/**
 	 * Set the identifier
 	 * 
