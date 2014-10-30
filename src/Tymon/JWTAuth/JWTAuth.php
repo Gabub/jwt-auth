@@ -85,7 +85,7 @@ class JWTAuth {
 	 */
 	public function fromUser($user)
 	{
-		var $custom = [];
+		$custom = [];
 		
 		foreach($this->custom as $key => $value)
 		{
