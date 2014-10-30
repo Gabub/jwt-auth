@@ -78,9 +78,9 @@ class JWTAuth {
 	 * @param  $user
 	 * @return string
 	 */
-	public function fromUser($user)
+	public function fromUser($user, $custom = [])
 	{
-		return $this->provider->encode($user->{$this->identifier})->get();
+		return $this->provider->encode($user->{$this->identifier}, $custom)->get();
 	}
 
 	/**
@@ -89,14 +89,14 @@ class JWTAuth {
 	 * @param  array $credentials
 	 * @return false|string
 	 */
-	public function attempt(array $credentials = [])
+	public function attempt(array $credentials = [], $custom = [])
 	{
 		if (! $this->auth->once($credentials) )
 		{
 			return false;
 		}
 
-		return $this->fromUser( $this->auth->user() );
+		return $this->fromUser( $this->auth->user(), $custom );
 	}
 
 	/**
